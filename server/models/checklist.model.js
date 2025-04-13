@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
     Checklist.hasMany(models.Task, {
       onDelete: "cascade",
     });
+    Checklist.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
 
   return Checklist;

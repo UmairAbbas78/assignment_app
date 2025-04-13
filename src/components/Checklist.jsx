@@ -8,7 +8,7 @@ const Checklist = ({ name, todos, category, onUpdate }) => {
   const [task, setTask] = useState("");
 
   const handleCreateTask = async () => {
-    const taskFetched = await dispatch(
+    await dispatch(
       createTask({ name: task, ChecklistId: category, status: false })
     );
     onUpdate();

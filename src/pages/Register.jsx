@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../store/features/authSlice";
+import { registerUser } from "../store/features/authSlice";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -14,18 +14,19 @@ const Login = () => {
     }
   }, [navigate]);
 
+  console.log(useSelector((state) => state.auth));
 
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
   const { loading, error } = useSelector((state) => state.auth);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const resultAction = await dispatch(loginUser({ username, password }));
+      const resultAction = await dispatch(registerUser({ username, password }));
 
-      if (loginUser.fulfilled.match(resultAction)) {
-        navigate("/home");
+      if (registerUser.fulfilled.match(resultAction)) {
+        navigate("/");
       } else {
         console.error("Login failed:", resultAction.payload);
       }
@@ -38,7 +39,7 @@ const Login = () => {
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-100 to-white">
       <div className="bg-white shadow-xl rounded-xl px-10 py-12 w-full max-w-sm">
         <h1 className="text-4xl font-extrabold text-center text-blue-600 mb-6">
-          Welcome Back 👋
+          Register
         </h1>
         <input
           value={username}
@@ -58,21 +59,17 @@ const Login = () => {
         {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
         <button
-          onClick={handleLogin}
+          onClick={handleRegister}
           disabled={loading}
           className={`w-full ${
             loading ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-600"
           } text-white font-semibold py-3 rounded-md transition duration-200`}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Please Wait..." : "Register"}
         </button>
-
-        <p className="mt-4">
-          Don't have an account? <a href="/register">Register</a>
-        </p>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

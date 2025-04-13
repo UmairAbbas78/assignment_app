@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import Checklist from "../components/Checklist";
 import { useDispatch } from "react-redux";
 import { createCategory, getAllTasks } from "../store/features/taskSlice";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const dispatch = useDispatch();
 
   const [category, setCategory] = useState("");
   const [allTasks, setAllTasks] = useState([]);
+  const [username, setUserName] = useState("User");
 
   const fetchTodos = async () => {
     const result = await dispatch(getAllTasks());
@@ -20,6 +22,8 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const name = jwtDecode(token).username;
+    setUserName(name);
     if (!token) {
       window.location.href = "/";
     }
@@ -28,7 +32,7 @@ const Home = () => {
   }, []);
 
   const handleCategory = async () => {
-    const categoryFetched = await dispatch(createCategory(category));
+    await dispatch(createCategory(category));
     fetchTodos();
   };
 
@@ -37,7 +41,7 @@ const Home = () => {
       <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800">
-            Welcome, User! 👋
+            {`Welcome, ${username} 👋`}
           </h2>
 
           <div className="flex flex-col sm:flex-row items-stretch gap-4 w-full sm:w-auto">
